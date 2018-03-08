@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    
+    <link type="text/css" rel="stylesheet" href="https://unpkg.com/bootstrap@4.0.0/dist/css/bootstrap.min.css" />
+    <link type="text/css" rel="stylesheet" href="https://unpkg.com/bootstrap-vue@2.0.0-rc.1/dist/bootstrap-vue.css" />
+    <!--
+    <link type="text/css" rel="stylesheet" href="include/css/bootstrap.min.4.0.0.css" />
+    <link type="text/css" rel="stylesheet" href="include/css/bootstrap-vue.2.0.0-rc.1.css" />
+	-->
+	
+    <!--<script src="include/js/vue.dev.2.5.13.js"></script>-->
+    <script src="https://unpkg.com/vue@2.5.13/dist/vue.js"></script>
+    <!--
+	<script src="include/js/polyfill.min.6.26.0.js"></script>
+    <script src="include/js/bootstrap-vue.2.0.0-rc.1.js"></script>
+    -->
+    <script src="https://unpkg.com/babel-polyfill@6.26.0/dist/polyfill.min.js"></script>
+    <script src="https://unpkg.com/bootstrap-vue@2.0.0-rc.1/dist/bootstrap-vue.js"></script>
+  </head>
+  <body>
+    <div id="app">
+      <top-menu selected="consulta"></top-menu>
+      <h1>CONSULTA</h1>
+      <div class="container">
+      <b-form @submit="onSubmit">
+        <!-- Nombre -->
+        <b-form-group id="nameGroup"
+                      label="Nombre(s)"
+                      label-for="nameInput">
+          <b-form-input id="nameInput"
+                        type="text"
+                        v-model="form.name"
+                        required
+                        placeholder="Ingrese su(s) nombre(s)">
+          </b-form-input>
+        </b-form-group>
+        <!-- Apellidos -->
+        <b-form-group id="lastNameGroup"
+                      label="Apellido(s)"
+                      label-for="lastNameInput">
+          <b-form-input id="lastNameInput"
+                        type="text"
+                        v-model="form.lastName"
+                        placeholder="Ingrese su(s) apellido(s)">
+          </b-form-input>
+        </b-form-group>
+        <b-button type="submit" variant="primary">Consultar</b-button>
+      </b-form>
+	  <b-table striped hover
+	           :items="tableItems"
+			   :fields="tableFields"
+			   :per-page="2"
+			   :total-rows="tableItems.length"
+			   :current-page="tableCurrentPage">
+	  </b-table>
+	  <b-pagination size="md" :total-rows="tableItems.length" :per-page="2" v-model="tableCurrentPage" align="center"></b-pagination>
+      </div>
+    </div>
+    <!-- <script src="include/js/App.vue" type="module"></script> -->
+    <script src="app.js"></script>
+  </body>
+</html>

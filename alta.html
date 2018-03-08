@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    
+    <link type="text/css" rel="stylesheet" href="https://unpkg.com/bootstrap@4.0.0/dist/css/bootstrap.min.css" />
+    <link type="text/css" rel="stylesheet" href="https://unpkg.com/bootstrap-vue@2.0.0-rc.1/dist/bootstrap-vue.css" />
+    <!--
+    <link type="text/css" rel="stylesheet" href="include/css/bootstrap.min.4.0.0.css" />
+    <link type="text/css" rel="stylesheet" href="include/css/bootstrap-vue.2.0.0-rc.1.css" />
+	-->
+	
+    <!--<script src="include/js/vue.dev.2.5.13.js"></script>-->
+    <script src="https://unpkg.com/vue@2.5.13/dist/vue.js"></script>
+    <!--
+	<script src="include/js/polyfill.min.6.26.0.js"></script>
+    <script src="include/js/bootstrap-vue.2.0.0-rc.1.js"></script>
+    -->
+    <script src="https://unpkg.com/babel-polyfill@6.26.0/dist/polyfill.min.js"></script>
+    <script src="https://unpkg.com/bootstrap-vue@2.0.0-rc.1/dist/bootstrap-vue.js"></script>
+  </head>
+  <body>
+    <div id="app">
+      <top-menu selected="alta"></top-menu>
+      <h1>ALTA</h1>
+      <div class="container">
+      <b-form @submit="onSubmit">
+        <!-- Nombre -->
+        <b-form-group id="nameGroup"
+                      label="Nombre(s)"
+                      label-for="nameInput">
+          <b-form-input id="nameInput"
+                        type="text"
+                        v-model.trim="form.name"
+						:state="nameState"
+						aria-describedby="inputLiveFeedback"
+                        required
+                        placeholder="Ingrese su(s) nombre(s)">
+          </b-form-input>
+		  <b-form-invalid-feedback id="inputLiveFeedback">
+            Enter {{ nameMessage }}
+          </b-form-invalid-feedback>
+        </b-form-group>
+        <!-- Apellidos -->
+        <b-form-group id="lastNameGroup"
+                      label="Apellido(s)"
+                      label-for="lastNameInput">
+          <b-form-input id="lastNameInput"
+                        type="text"
+                        v-model.trim="form.lastName"
+						:state="lastNameState"
+						aria-describedby="inputLiveFeedback"
+                        placeholder="Ingrese su(s) apellido(s)">
+          </b-form-input>
+		  <b-form-invalid-feedback id="inputLiveFeedback">
+            Enter {{ lastNameMessage }}
+          </b-form-invalid-feedback>
+        </b-form-group>
+        <!-- Tipo de viaje -->
+        <b-form-group id="tripTypeGroup"
+                      label="Tipo de viaje"
+                      label-for="tripTypeInput">
+          <b-form-radio-group id="tripTypeInput"
+                              v-model="form.tripType"
+                              name="tripTypeName"
+							  >
+            <b-form-radio value="simple">Simple</b-form-radio>
+            <b-form-radio value="round">Redondo</b-form-radio>
+          </b-form-radio-group>
+        </b-form-group>
+        <b-form-group id="dateGroup"
+                      label="Fecha(s) de viaje">
+          <!-- Fecha salida -->
+          <b-form-group id="departureGroup"
+                        label="Fecha(s) de salida"
+                        label-for="departureInput">
+            <b-form-input id="departureInput"
+                          type="date"
+                          required
+                          v-model="form.departure">
+            </b-form-input>
+          </b-form-group>
+          <!-- Fecha regreso -->
+          <b-form-group id="arrivalGroup"
+                      label="Fecha(s) de regreso"
+                      label-for="arrivalInput">
+            <b-form-input id="arrivalInput"
+                          type="date"
+                          v-model="form.arrival"
+						  :disabled="arrivalDisabled">
+            </b-form-input>
+          </b-form-group>
+        </b-form-group>
+        <!-- Número pasajeros -->
+        <b-form-group id="numberGroup"
+                      label="Total de acompañantes"
+                      label-for="numberInput">
+          <b-form-input id="numberInput"
+                        type="number"
+                        v-model="form.number"
+						:state="numberState"
+						aria-describedby="inputLiveFeedback"
+						min="0"
+						max="30">
+          </b-form-input>
+		  <b-form-invalid-feedback id="inputLiveFeedback">
+            Must be a value between 0 and 30
+          </b-form-invalid-feedback>
+        </b-form-group>
+        <!-- Tipo de pasajero -->
+        <b-form-group id="passengerTypeGroup"
+                      label="Tipo de pasajero:"
+                      label-for="passengerTypeInput">
+          <b-form-select id="passengerTypeInput"
+                        :options="passengerTypes"
+                        required
+						state="form.passengerType != null"
+                        v-model="form.passengerType">
+          </b-form-select>
+        </b-form-group>
+        <!-- Servicios adicionales -->
+        <b-form-group id="servicesGroup"
+                      label="Servicios adicionales"
+                      label-for="servicesInput">
+          <b-form-checkbox-group id="servicesInput"
+                                v-model="form.services"
+								v-for="item in serviceTypes" :key="item.value">
+            <!-- <b-form-checkbox value="pet">Mascota</b-form-checkbox>
+            <b-form-checkbox value="extra">Equipaje extra</b-form-checkbox>
+            <b-form-checkbox value="protection">Seguro de viaje</b-form-checkbox>
+            <b-form-checkbox value="stroller">Carreola</b-form-checkbox> -->
+			<b-form-checkbox :value="item.value">{{ item.text }}</b-form-checkbox>
+          </b-form-checkbox-group>
+        </b-form-group>
+        <b-button type="submit" variant="primary">Registrar</b-button>
+      </b-form>
+    </div>
+    </div>
+    <!-- <script src="include/js/App.vue" type="module"></script> -->
+    <script src="app.js"></script>
+  </body>
+</html>
