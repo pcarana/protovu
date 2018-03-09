@@ -39,8 +39,17 @@
           </b-form-input>
         </b-form-group>
         <b-button v-on:click="onSubmitDomain" variant="primary">Enviar</b-button>
-        <b-card v-if="apiresponse">
-          <p class="card-text">{{ apiresponse }}</p>
+        <b-alert variant="danger"
+	             dismissible
+	             :show="showDismissibleAlert"
+	             @dismissed="showDismissibleAlert=false">
+	      {{ errorMessage }}
+	    </b-alert>
+        <b-card v-if="form.apiresponse">
+          <p class="card-text">{{ form.apiresponse }}</p>
+        </b-card>
+        <b-card v-if="form.apiresponse">
+          <p class="card-text">{{ apiobject }}</p>
         </b-card>
       </b-form>
     </div>
