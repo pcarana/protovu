@@ -30,14 +30,12 @@
       <div class="container">
       <b-form>
         <b-button v-on:click="showGraphLine" variant="primary">Graph 1</b-button>
-        <b-card v-if="apiresponse">
-          <p class="card-text">{{ apiresponse }}</p>
-        </b-card>
       </b-form>
 	  <line-chart></line-chart>
       </div>
     </div>
     <!-- <script src="include/js/App.vue" type="module"></script> -->
+    <script src="estadisticas.js"></script>
     <script src="app.js"></script>
   </body>
 </html>
