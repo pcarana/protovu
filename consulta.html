@@ -24,38 +24,30 @@
       <top-menu selected="consulta"></top-menu>
       <h1>CONSULTA</h1>
       <div class="container">
-      <b-form @submit="onSubmit">
-        <!-- Nombre -->
-        <b-form-group id="nameGroup"
-                      label="Nombre(s)"
-                      label-for="nameInput">
-          <b-form-input id="nameInput"
-                        type="text"
-                        v-model="form.name"
-                        required
-                        placeholder="Ingrese su(s) nombre(s)">
-          </b-form-input>
-        </b-form-group>
-        <!-- Apellidos -->
-        <b-form-group id="lastNameGroup"
-                      label="Apellido(s)"
-                      label-for="lastNameInput">
-          <b-form-input id="lastNameInput"
-                        type="text"
-                        v-model="form.lastName"
-                        placeholder="Ingrese su(s) apellido(s)">
-          </b-form-input>
-        </b-form-group>
-        <b-button type="submit" variant="primary">Consultar</b-button>
-      </b-form>
-	  <b-table striped hover
-	           :items="tableItems"
-			   :fields="tableFields"
-			   :per-page="2"
-			   :total-rows="tableItems.length"
-			   :current-page="tableCurrentPage">
-	  </b-table>
-	  <b-pagination size="md" :total-rows="tableItems.length" :per-page="2" v-model="tableCurrentPage" align="center"></b-pagination>
+      <b-container fluid>
+	      <b-row>
+		      <b-col md="10" class="my-1">
+			      <b-form-group horizontal label="Filtrar" class="mb-0">
+			        <b-input-group>
+			          <b-form-input v-model="filter" placeholder="Buscar..." />
+			          <b-input-group-append>
+			            <b-button :disabled="!filter" @click="filter = ''" variant="primary">Limpiar</b-button>
+			          </b-input-group-append>
+			        </b-input-group>
+			      </b-form-group>
+		      </b-col>
+	      </b-row>
+		  <b-table striped hover show-empty
+		           :items="tableItems"
+				   :fields="tableFields"
+				   :per-page="perPage"
+				   :total-rows="totalRows"
+				   :current-page="tableCurrentPage"
+				   :filter="filter"
+				   @filtered="onFiltered">
+		  </b-table>
+		  <b-pagination size="md" :total-rows="totalRows" :per-page="perPage" v-model="tableCurrentPage" align="center"></b-pagination>
+	  </b-container>
       </div>
     </div>
     <!-- <script src="include/js/App.vue" type="module"></script> -->
