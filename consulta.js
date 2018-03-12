@@ -38,13 +38,40 @@ var data = {
 	tableCurrentPage : 1,
 	totalRows: items.length,
 	perPage: 4,
-	filter: null
+	searchFilterOpts: [
+		{ text: 'Todos', value: null },
+	    { text: 'Nombre', value: 'first_name' },
+	    { text: 'Apellido', value: 'last_name' },
+	    { text: 'Edad', value: 'age' }
+	],
+	searchFilter: null,
+	filterItem: null
 };
 
 var methods = {
 		onFiltered (filteredItems) {
 		    // Trigger pagination to update the number of buttons/pages due to filtering
-		    this.totalRows = filteredItems.length
-		    this.tableCurrentPage = 1
+		    this.totalRows = filteredItems.length;
+		    this.tableCurrentPage = 1;
+		},
+		customFilter(item) {
+			var searchFilterOpt = this.searchFilter === null ? '' : this.searchFilter.trim();
+			var filterItemTxt = this.filterItem === null ? '' : this.filterItem.trim();
+			try {
+				var regexp = new RegExp(filterItemTxt, 'i');
+			} catch (e) {
+				// Wait until the regexp is valid
+				return true;
+			}
+			switch (searchFilterOpt) {
+			case 'first_name':
+				return item.first_name.match(regexp);
+			case 'last_name':
+				return item.last_name.match(regexp);
+			case 'age':
+				return item.age.toString().match(regexp);
+			default:
+				return item.first_name.match(regexp) || item.last_name.match(regexp) || item.age.toString().match(regexp);
+			}
 		}
 };

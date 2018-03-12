@@ -29,9 +29,15 @@
 		      <b-col md="10" class="my-1">
 			      <b-form-group horizontal label="Filtrar" class="mb-0">
 			        <b-input-group>
-			          <b-form-input v-model="filter" placeholder="Buscar..." />
+			          <b-input-group-prepend>
+			            <b-form-select id="searchFilter"
+                        				:options="searchFilterOpts"
+                        				v-model="searchFilter">
+          				</b-form-select>
+			          </b-input-group-prepend>
+			          <b-form-input v-model="filterItem" placeholder="Buscar..."></b-form-input>
 			          <b-input-group-append>
-			            <b-button :disabled="!filter" @click="filter = ''" variant="primary">Limpiar</b-button>
+			            <b-btn :disabled="!customFilter" @click="filterItem = ''" variant="outline-primary">Limpiar</b-btn>
 			          </b-input-group-append>
 			        </b-input-group>
 			      </b-form-group>
@@ -43,7 +49,7 @@
 				   :per-page="perPage"
 				   :total-rows="totalRows"
 				   :current-page="tableCurrentPage"
-				   :filter="filter"
+				   :filter="customFilter"
 				   @filtered="onFiltered">
 		  </b-table>
 		  <b-pagination size="md" :total-rows="totalRows" :per-page="perPage" v-model="tableCurrentPage" align="center"></b-pagination>
