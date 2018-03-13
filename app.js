@@ -90,6 +90,10 @@ var app_computed = {};
 if ( typeof(computed) !== "undefined" && computed !== null ) {
 	app_computed = computed;
 }
+var app_mounted = function() {};
+if ( typeof(mounted) !== "undefined" && mounted !== null ) {
+	app_mounted = mounted;
+}
 
 Vue.mixin({
 	methods: {
@@ -102,11 +106,12 @@ Vue.mixin({
 	}
 });
 
-new Vue({
+var app = new Vue({
   el: '#app',
   data : app_data,
   methods: app_methods,
   computed: app_computed,
+  mounted: app_mounted,
   i18n
   /*,
   template: '<App/>',

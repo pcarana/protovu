@@ -9,6 +9,11 @@ var data = {
       passengerType: null,
       services: []
     },
+    bar: {
+    	counter: 0,
+    	max: 100
+    },
+    timer: null,
     passengerTypes: [
       { text: 'Seleccione un valor', value: null },
       { text: 'Infante (< 2 años)', value: 'Infante' },
@@ -20,13 +25,28 @@ var data = {
 	  { text: 'Equipaje extra', value: 'extra'},
 	  { text: 'Seguro de viaje', value: 'protection'},
 	  { text: 'Carreola', value: 'stroller'}
-	]
+	],
+	modalText: null
 };
 
 var methods = {
     onSubmit (evt) {
         evt.preventDefault();
-        alert(JSON.stringify(this.form));
+        this.showModal();
+      },
+      showModal () {
+          this.$refs.myModalRef.show();
+          this.timer = setInterval(() => {
+        	if (this.bar.counter < this.bar.max) {
+        		this.bar.counter += 10;
+        	}
+      	}, 200);
+          this.modalText = JSON.stringify(this.form);
+      },
+      hideModal () {
+    	  this.$refs.myModalRef.hide();
+    	  clearInterval(this.timer)
+    	  this.timer = null
       }
 };
 

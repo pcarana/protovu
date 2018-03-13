@@ -135,6 +135,15 @@
         </b-form-group>
         <b-button type="submit" variant="primary">Registrar</b-button>
       </b-form>
+      
+      <b-modal ref="myModalRef" hide-footer title="Using Component Methods">
+	    <div class="d-block text-center">
+	      <h3>Hello From My Modal!</h3>
+	      <b-progress :value="bar.counter" :max="bar.max" show-progress animated></b-progress>
+	      <p>{{ modalText }}</p>
+	    </div>
+	    <b-btn class="mt-3" variant="outline-danger" block @click="hideModal">Close Me</b-btn>
+	  </b-modal>
     </div>
     </div>
     <!-- <script src="include/js/App.vue" type="module"></script> -->
