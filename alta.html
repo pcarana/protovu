@@ -12,6 +12,7 @@
 	
     <!--<script src="include/js/vue.dev.2.5.13.js"></script>-->
     <script src="https://unpkg.com/vue@2.5.13/dist/vue.js"></script>
+    <script src="https://unpkg.com/vue-i18n/dist/vue-i18n.js"></script>
     <!--
 	<script src="include/js/polyfill.min.6.26.0.js"></script>
     <script src="include/js/bootstrap-vue.2.0.0-rc.1.js"></script>
@@ -21,8 +22,8 @@
   </head>
   <body>
     <div id="app">
-      <top-menu selected="alta"></top-menu>
-      <h1>ALTA</h1>
+      <top-menu selected="register"></top-menu>
+      <h1>{{ $t("modules.register") }}</h1>
       <div class="container">
       <b-form @submit="onSubmit">
         <!-- Nombre -->

@@ -12,6 +12,7 @@
 	
     <!--<script src="include/js/vue.dev.2.5.13.js"></script>-->
     <script src="https://unpkg.com/vue@2.5.13/dist/vue.js"></script>
+    <script src="https://unpkg.com/vue-i18n/dist/vue-i18n.js"></script>
     <!--
 	<script src="include/js/polyfill.min.6.26.0.js"></script>
     <script src="include/js/bootstrap-vue.2.0.0-rc.1.js"></script>
@@ -22,16 +23,17 @@
 	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>
     <script src="https://unpkg.com/vue-chartjs/dist/vue-chartjs.min.js"></script>
+    
   </head>
   <body>
     <div id="app">
-      <top-menu selected="estadisticas"></top-menu>
-      <h1>ESTADÍSTICAS</h1>
+      <top-menu selected="stats"></top-menu>
+      <h1>{{ $t("modules.stats") }}</h1>
       <div class="container">
 	      <b-form>
-	        <b-button v-on:click="showGraph('line')" variant="primary">Líneas</b-button>
-	        <b-button v-on:click="showGraph('pie')" variant="primary">Pay</b-button>
-	        <b-button v-on:click="showGraph('bar')" variant="primary">Barra</b-button>
+	        <b-button v-on:click="showGraph('line')" variant="primary">{{$t("line")}}</b-button>
+	        <b-button v-on:click="showGraph('pie')" variant="primary">{{$t("pie")}}</b-button>
+	        <b-button v-on:click="showGraph('bar')" variant="primary">{{$t("bar")}}</b-button>
 	      </b-form>
 		  <line-chart v-if="chart === 'line'"></line-chart>
 		  <pie-chart v-if="chart === 'pie'"></pie-chart>
