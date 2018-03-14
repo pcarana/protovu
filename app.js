@@ -24,7 +24,8 @@ const messages = {
 }
 
 const i18n = new VueI18n({
-	locale: 'es',
+	locale: localStorage.getItem('lang') !== null && localStorage.getItem('lang') !== '' ?
+					localStorage.getItem('lang') : 'es',
 	messages
 });
 
@@ -99,6 +100,7 @@ Vue.mixin({
 	methods: {
 		switchLang(newLang) {
 	    	i18n.locale = newLang;
+	    	localStorage.setItem('lang', i18n.locale);
 	    },
 	    isActiveLang(langId) {
 	    	return i18n.locale === langId;
