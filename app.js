@@ -1,8 +1,5 @@
-const messages = {
+const global_messages = {
 		en: {
-			line: 'Line',
-			bar: 'Bar',
-			pie: 'Pie',
 			modules: {
 				register: 'Register',
 				search: 'Search',
@@ -11,9 +8,6 @@ const messages = {
 			}
 		},
 		es: {
-			line: 'Líneas',
-			bar: 'Barra',
-			pie: 'Pay',
 			modules: {
 				register: 'Alta',
 				search: 'Consulta',
@@ -21,7 +15,21 @@ const messages = {
 				stats: 'Estadísticas'
 			}
 		}
+};
+
+if ( typeof(messages_es) === "undefined" || messages_es === null ) {
+	var messages_es = { es: {} };
 }
+if ( typeof(messages_en) === "undefined" || messages_en === null ) {
+	var messages_en = { en: {} };
+}
+Object.assign(messages_es, global_messages.es);
+Object.assign(messages_en, global_messages.en);
+
+const messages = {
+		es: messages_es,
+		en: messages_en
+};
 
 const i18n = new VueI18n({
 	locale: localStorage.getItem('lang') !== null && localStorage.getItem('lang') !== '' ?
