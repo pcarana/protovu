@@ -85,6 +85,7 @@ var methods = {
       hideModal () {
     	  this.$refs.myModalRef.hide();
     	  this.clearForm();
+    	  //beforeDestroy();
       },
       clearForm() {
     	var form = this.form;
@@ -107,7 +108,7 @@ var computed = {
 		nameMessage() {
 			var nameLength = this.form.name === null ? 0: this.form.name.length;
 			if (nameLength < 2 || nameLength > 50) {
-				return nameLength < 2 ? 'at least 2 characters' : 'at most 50 characters';
+				return nameLength < 2 ? 'Enter at least 2 characters' : 'Enter at most 50 characters';
 			}
 			return '';
 		},
@@ -121,9 +122,36 @@ var computed = {
 		lastNameMessage() {
 			var lastNameLength = this.form.lastName === null ? 0: this.form.lastName.length;
 			if (lastNameLength > 0 && (lastNameLength < 2 || lastNameLength > 50)) {
-				return lastNameLength < 2 ? 'at least 2 characters' : 'at most 50 characters';
+				return lastNameLength < 2 ? 'Enter at least 2 characters' : 'Enter at most 50 characters';
 			}
 			return '';
+		},
+		departureState() {
+			var departure = this.form.departure;
+			if (departure === null || departure.length === 0) {
+				return false;
+			}
+			var now = new Date();
+			now.setHours(0);
+			now.setMinutes(0);
+			now.setSeconds(0);
+			now.setMilliseconds(0);
+			var departureDate = new Date(departure + "T00:00:00" + now.toString().match(/([-\+][0-9]+)\s/)[1]);
+			return departureDate >= now;
+		},
+		arrivalState() {
+			var arrival = this.form.arrival;
+			var departure = this.form.departure;
+			var tripType = this.form.tripType;
+			if (tripType === 'round' && (departure === null || departure.length === 0)) {
+				return false;
+			}
+			if (arrival === null || departure === null || arrival.length === 0 || departure.length === 0) {
+				return null;
+			}
+			var departureDate = new Date(departure);
+			var arrivalDate = new Date(arrival);
+			return arrivalDate >= departureDate;
 		},
 		arrivalDisabled() {
 			return this.form.tripType === 'simple';
@@ -133,6 +161,14 @@ var computed = {
 				return null;
 			}
 			return !isNaN(this.form.familySize) && this.form.familySize >= 0 && this.form.familySize <= 30;
+		},
+		disableSubmit() {
+			var nameState = this.nameState;
+			var lastNameState = this.lastNameState === null ? true : this.lastNameState;
+			var familySizeState = this.familySizeState === null ? true : this.familySizeState;
+			var departureState = this.departureState === null ? true : this.departureState;
+			var arrivalState = this.arrivalState === null ? true : this.arrivalState;
+			return !(nameState && lastNameState && familySizeState && departureState && arrivalState);
 		}
 };
 

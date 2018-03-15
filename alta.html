@@ -27,7 +27,7 @@
       <top-menu selected="register"></top-menu>
       <h1>{{ $t("modules.register") }}</h1>
       <div class="container">
-      <b-form @submit="onSubmit">
+      <b-form @submit="onSubmit" novalidate class="needs-validation">
         <!-- Nombre -->
         <b-form-group id="nameGroup"
                       label="Nombre(s)"
@@ -41,7 +41,7 @@
                         placeholder="Ingrese su(s) nombre(s)">
           </b-form-input>
 		  <b-form-invalid-feedback id="inputLiveFeedback">
-            Enter {{ nameMessage }}
+            {{ nameMessage }}
           </b-form-invalid-feedback>
         </b-form-group>
         <!-- Apellidos -->
@@ -56,7 +56,7 @@
                         placeholder="Ingrese su(s) apellido(s)">
           </b-form-input>
 		  <b-form-invalid-feedback id="inputLiveFeedback">
-            Enter {{ lastNameMessage }}
+            {{ lastNameMessage }}
           </b-form-invalid-feedback>
         </b-form-group>
         <!-- Tipo de viaje -->
@@ -82,8 +82,12 @@
             <b-form-input id="departureInput"
                           type="date"
                           required
+                          :state="departureState"
                           v-model="form.departure">
             </b-form-input>
+		    <b-form-invalid-feedback>
+              Required, must be at least today's date
+            </b-form-invalid-feedback>
           </b-form-group>
           <!-- Fecha regreso -->
           <b-form-group id="arrivalGroup"
@@ -92,8 +96,12 @@
             <b-form-input id="arrivalInput"
                           type="date"
                           v-model="form.arrival"
+                          :state="arrivalState"
 						  :disabled="arrivalDisabled">
             </b-form-input>
+		    <b-form-invalid-feedback>
+              Must be greater than or equal to arrival date
+            </b-form-invalid-feedback>
           </b-form-group>
         </b-form-group>
         <!-- Número pasajeros -->
@@ -108,7 +116,7 @@
 						min="0"
 						max="30">
           </b-form-input>
-		  <b-form-invalid-feedback id="inputLiveFeedback">
+		  <b-form-invalid-feedback>
             Must be a value between 0 and 30
           </b-form-invalid-feedback>
         </b-form-group>
@@ -135,7 +143,7 @@
         </b-form-group>
         <b-button type="button" variant="secondary" @click="quickFill">Quick fill</b-button>
         <b-button type="button" variant="danger" @click="clearForm">Clear</b-button>
-        <b-button type="submit" variant="primary">Registrar</b-button>
+        <b-button type="submit" variant="primary" :disabled="disableSubmit">Registrar</b-button>
       </b-form>
       
       <b-modal ref="myModalRef" hide-footer title="Using Component Methods" no-close-on-backdrop no-close-on-esc>
