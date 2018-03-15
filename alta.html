@@ -27,7 +27,6 @@
       <top-menu selected="register"></top-menu>
       <h1>{{ $t("modules.register") }}</h1>
       <div class="container">
-      <b-button type="button" variant="secondary" @click="quickFill">Quick fill</b-button>
       <b-form @submit="onSubmit">
         <!-- Nombre -->
         <b-form-group id="nameGroup"
@@ -134,6 +133,8 @@
 			<b-form-checkbox :value="item.value">{{ item.text }}</b-form-checkbox>
           </b-form-checkbox-group>
         </b-form-group>
+        <b-button type="button" variant="secondary" @click="quickFill">Quick fill</b-button>
+        <b-button type="button" variant="danger" @click="clearForm">Clear</b-button>
         <b-button type="submit" variant="primary">Registrar</b-button>
       </b-form>
       

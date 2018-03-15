@@ -2,8 +2,8 @@ const eventHub = new Vue();
 
 var data = {
     form: {
-      name: '',
-      lastName: '',
+      name: null,
+      lastName: null,
       familySize: null,
       tripType: 'simple',
       departure: null,
@@ -84,30 +84,42 @@ var methods = {
       },
       hideModal () {
     	  this.$refs.myModalRef.hide();
+    	  this.clearForm();
+      },
+      clearForm() {
+    	var form = this.form;
+      	form.name = null;
+      	form.lastName = null;
+      	form.familySize = null;
+      	form.tripType = 'simple';
+      	form.departure = null;
+      	form.arrival = null;
+      	form.passengerType = null;
+      	form.services = [];
       }
 };
 
 var computed = {
 	  nameState() {
-			var nameLength = this.form.name.length;
+			var nameLength = this.form.name === null ? 0: this.form.name.length;
 			return nameLength >= 2 && nameLength <= 50 ? true : false;
 		},
 		nameMessage() {
-			var nameLength = this.form.name.length;
+			var nameLength = this.form.name === null ? 0: this.form.name.length;
 			if (nameLength < 2 || nameLength > 50) {
 				return nameLength < 2 ? 'at least 2 characters' : 'at most 50 characters';
 			}
 			return '';
 		},
 		lastNameState() {
-			var lastNameLength = this.form.lastName.length;
+			var lastNameLength = this.form.lastName === null ? 0: this.form.lastName.length;
 			if (this.form.lastName === null || lastNameLength === 0) {
 				return null;
 			}
 			return lastNameLength >= 2 && lastNameLength <= 50 ? true : false;
 		},
 		lastNameMessage() {
-			var lastNameLength = this.form.lastName.length;
+			var lastNameLength = this.form.lastName === null ? 0: this.form.lastName.length;
 			if (lastNameLength > 0 && (lastNameLength < 2 || lastNameLength > 50)) {
 				return lastNameLength < 2 ? 'at least 2 characters' : 'at most 50 characters';
 			}
