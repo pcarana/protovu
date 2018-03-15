@@ -19,12 +19,15 @@
     -->
     <script src="https://unpkg.com/babel-polyfill@6.26.0/dist/polyfill.min.js"></script>
     <script src="https://unpkg.com/bootstrap-vue@2.0.0-rc.1/dist/bootstrap-vue.js"></script>
+	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+	
   </head>
   <body>
     <div id="app">
       <top-menu selected="register"></top-menu>
       <h1>{{ $t("modules.register") }}</h1>
       <div class="container">
+      <b-button type="button" variant="secondary" @click="quickFill">Quick fill</b-button>
       <b-form @submit="onSubmit">
         <!-- Nombre -->
         <b-form-group id="nameGroup"
@@ -63,10 +66,12 @@
                       label-for="tripTypeInput">
           <b-form-radio-group id="tripTypeInput"
                               v-model="form.tripType"
-                              name="tripTypeName"
-							  >
-            <b-form-radio value="simple">Simple</b-form-radio>
-            <b-form-radio value="round">Redondo</b-form-radio>
+                              name="tripTypeName">
+            <b-form-radio v-for="item in tripTypes" :key="item.value"
+            			  :id="item.value"
+						  :value="item.value">
+				{{ item.text }}
+			</b-form-radio>
           </b-form-radio-group>
         </b-form-group>
         <b-form-group id="dateGroup"
@@ -93,13 +98,13 @@
           </b-form-group>
         </b-form-group>
         <!-- Número pasajeros -->
-        <b-form-group id="numberGroup"
+        <b-form-group id="familySizeGroup"
                       label="Total de acompañantes"
-                      label-for="numberInput">
-          <b-form-input id="numberInput"
+                      label-for="familySizeInput">
+          <b-form-input id="familySizeInput"
                         type="number"
-                        v-model="form.number"
-						:state="numberState"
+                        v-model="form.familySize"
+						:state="familySizeState"
 						aria-describedby="inputLiveFeedback"
 						min="0"
 						max="30">
@@ -126,21 +131,21 @@
           <b-form-checkbox-group id="servicesInput"
                                 v-model="form.services"
 								v-for="item in serviceTypes" :key="item.value">
-            <!-- <b-form-checkbox value="pet">Mascota</b-form-checkbox>
-            <b-form-checkbox value="extra">Equipaje extra</b-form-checkbox>
-            <b-form-checkbox value="protection">Seguro de viaje</b-form-checkbox>
-            <b-form-checkbox value="stroller">Carreola</b-form-checkbox> -->
 			<b-form-checkbox :value="item.value">{{ item.text }}</b-form-checkbox>
           </b-form-checkbox-group>
         </b-form-group>
         <b-button type="submit" variant="primary">Registrar</b-button>
       </b-form>
       
-      <b-modal ref="myModalRef" hide-footer title="Using Component Methods">
+      <b-modal ref="myModalRef" hide-footer title="Using Component Methods" no-close-on-backdrop no-close-on-esc>
 	    <div class="d-block text-center">
 	      <h3>Hello From My Modal!</h3>
-	      <b-progress :value="bar.counter" :max="bar.max" show-progress animated></b-progress>
+	      <b-progress height="2rem">
+	      	<b-progress-bar :value="100" :animated="bar.animated" :label="bar.text" :variant="bar.animated ? 'info' : 'success'">
+	      	</b-progress-bar>
+	      </b-progress>
 	      <p>{{ modalText }}</p>
+	      <p>{{ errorMessage }}</p>
 	    </div>
 	    <b-btn class="mt-3" variant="outline-danger" block @click="hideModal">Close Me</b-btn>
 	  </b-modal>

@@ -103,6 +103,14 @@ var app_mounted = function() {};
 if ( typeof(mounted) !== "undefined" && mounted !== null ) {
 	app_mounted = mounted;
 }
+var app_created = function() {};
+if ( typeof(created) !== "undefined" && created !== null ) {
+	app_created = created;
+}
+var app_beforeDestroy = function() {};
+if ( typeof(beforeDestroy) !== "undefined" && beforeDestroy !== null ) {
+	app_beforeDestroy = beforeDestroy;
+}
 
 Vue.mixin({
 	methods: {
@@ -122,7 +130,9 @@ var app = new Vue({
   methods: app_methods,
   computed: app_computed,
   mounted: app_mounted,
-  i18n
+  i18n,
+  created: app_created,
+  beforeDestroy: app_beforeDestroy
   /*,
   template: '<App/>',
   components: { App }
