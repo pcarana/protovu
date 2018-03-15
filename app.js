@@ -45,7 +45,7 @@ Vue.component('top-menu', {
     <b-collapse is-nav id="nav_collapse">
       <b-navbar-nav>
         <b-nav-item v-for="item in navItems"
-                    :href="item.href"
+                    :href="checkSelected(item) ? '#' : item.href"
                     :key="item.id"
                     :active=checkSelected(item)>
           {{ $t(item.label) }}
