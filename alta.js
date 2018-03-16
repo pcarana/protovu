@@ -197,6 +197,7 @@ var beforeDestroy = function () {
 
 function createAxios() {
     const myaxios = axios.create();
+    myaxios.defaults.headers.common['Accept-Language'] = i18n.locale;
     myaxios.interceptors.request.use(
         conf => {
             eventHub.$emit('before-request');
