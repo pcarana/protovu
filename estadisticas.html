@@ -5,27 +5,17 @@
     
     <link type="text/css" rel="stylesheet" href="https://unpkg.com/bootstrap@4.0.0/dist/css/bootstrap.min.css" />
     <link type="text/css" rel="stylesheet" href="https://unpkg.com/bootstrap-vue@2.0.0-rc.1/dist/bootstrap-vue.css" />
-    <!--
-    <link type="text/css" rel="stylesheet" href="include/css/bootstrap.min.4.0.0.css" />
-    <link type="text/css" rel="stylesheet" href="include/css/bootstrap-vue.2.0.0-rc.1.css" />
-	-->
 	
-    <!--<script src="include/js/vue.dev.2.5.13.js"></script>-->
     <script src="https://unpkg.com/vue@2.5.13/dist/vue.js"></script>
     <script src="https://unpkg.com/vue-i18n/dist/vue-i18n.js"></script>
-    <!--
-	<script src="include/js/polyfill.min.6.26.0.js"></script>
-    <script src="include/js/bootstrap-vue.2.0.0-rc.1.js"></script>
-	<script src="include/js/axios.min.js"></script>
-    -->
     <script src="https://unpkg.com/babel-polyfill@6.26.0/dist/polyfill.min.js"></script>
     <script src="https://unpkg.com/bootstrap-vue@2.0.0-rc.1/dist/bootstrap-vue.js"></script>
 	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>
     <script src="https://unpkg.com/vue-chartjs/dist/vue-chartjs.min.js"></script>
     
-    <script src="scripts/labels/en/stats.js"></script>
-    <script src="scripts/labels/es/stats.js"></script>
+    <script src="labels/en/stats.js"></script>
+    <script src="labels/es/stats.js"></script>
     
   </head>
   <body>
@@ -45,8 +35,7 @@
       <br />
       <p>{{$t("stats.thanks")}} <a href="http://vue-chartjs.org/" target="_blank">http://vue-chartjs.org/</a></p>
     </div>
-    <!-- <script src="include/js/App.vue" type="module"></script> -->
-    <script src="estadisticas.js"></script>
-    <script src="app.js"></script>
+    <script src="scripts/estadisticas.js"></script>
+    <script src="scripts/app.js"></script>
   </body>
 </html>
