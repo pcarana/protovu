@@ -16,20 +16,20 @@ var data = {
     	text: 'loading'
     },
     passengerTypes: [
-      { text: 'Seleccione un valor', value: null },
-      { text: 'Infante (< 2 años)', value: 'Infante' },
-      { text: 'Niño (2 a 17 años)', value: 'Niño' },
-      { text: 'Adulto (> 18 años)', value: 'Adulto' }
+      { label: 'register.passengerType.hint', value: null },
+      { label: 'register.passengerType.types.baby', value: 'baby' },
+      { label: 'register.passengerType.types.kid', value: 'kid' },
+      { label: 'register.passengerType.types.adult', value: 'adult' }
     ],
 	serviceTypes: [
-	  { text: 'Mascota', value: 'pet'},
-	  { text: 'Equipaje extra', value: 'extra'},
-	  { text: 'Seguro de viaje', value: 'protection'},
-	  { text: 'Carreola', value: 'stroller'}
+	  { label: 'register.services.types.pet', value: 'pet'},
+	  { label: 'register.services.types.extra', value: 'extra'},
+	  { label: 'register.services.types.protection', value: 'protection'},
+	  { label: 'register.services.types.stroller', value: 'stroller'}
 	],
 	tripTypes: [
-		{ text: 'Simple', value: 'simple' },
-		{ text: 'Redondo', value: 'round' },
+		{ label: 'register.tripType.simple', value: 'simple' },
+		{ label: 'register.tripType.round', value: 'round' },
 	],
 	modalText: null,
 	apiobject: null,
@@ -55,7 +55,7 @@ var methods = {
     	form.tripType = 'round';
     	form.departure = '2018-11-01';
     	form.arrival = '2018-12-01';
-    	form.passengerType = 'Adulto';
+    	form.passengerType = 'adult';
     	form.services = ['pet', 'protection'];
     },
     onSubmit (evt) {
@@ -108,7 +108,7 @@ var computed = {
 		nameMessage() {
 			var nameLength = this.form.name === null ? 0: this.form.name.length;
 			if (nameLength < 2 || nameLength > 50) {
-				return nameLength < 2 ? 'Enter at least 2 characters' : 'Enter at most 50 characters';
+				return nameLength < 2 ? 'register.errors.name.minLength' : 'register.errors.name.maxLength';
 			}
 			return '';
 		},
@@ -122,7 +122,7 @@ var computed = {
 		lastNameMessage() {
 			var lastNameLength = this.form.lastName === null ? 0: this.form.lastName.length;
 			if (lastNameLength > 0 && (lastNameLength < 2 || lastNameLength > 50)) {
-				return lastNameLength < 2 ? 'Enter at least 2 characters' : 'Enter at most 50 characters';
+				return lastNameLength < 2 ? 'register.errors.name.minLength' : 'register.errors.name.maxLength';
 			}
 			return '';
 		},
