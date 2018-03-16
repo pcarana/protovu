@@ -114,11 +114,11 @@
                         v-model="form.familySize"
 						:state="familySizeState"
 						min="0"
-						max="30"
+						max="31"
 						:placeholder="$t('register.familySize.hint')">
           </b-form-input>
 		  <b-form-invalid-feedback>
-            {{ $t("register.errors.familySize.range", {min: "0", max: "30"}) }}
+            {{ $t("register.errors.familySize.range", {min: "0", max: "31"}) }}
           </b-form-invalid-feedback>
         </b-form-group>
         <!-- Tipo de pasajero -->
@@ -155,11 +155,11 @@
       <b-modal ref="myModalRef" hide-footer :title="$t('register.modal.title')" no-close-on-backdrop no-close-on-esc>
 	    <div class="d-block text-center">
 	      <b-progress height="2rem">
-	      	<b-progress-bar :value="100" :animated="bar.animated" :label="bar.text" :variant="bar.animated ? 'info' : 'success'">
+	      	<b-progress-bar :value="100" :animated="bar.animated" :label="$t(bar.label)" :variant="bar.animated ? 'info' : bar.error ? 'danger' : 'success'">
 	      	</b-progress-bar>
 	      </b-progress>
 	      <p>{{ modalText }}</p>
-	      <p>{{ errorMessage }}</p>
+	      <p v-html="errorMessage"></p>
 	    </div>
 	    <b-btn class="mt-3" variant="outline-danger" block @click="hideModal">{{ $t("register.modal.close") }}</b-btn>
 	  </b-modal>

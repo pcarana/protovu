@@ -13,7 +13,8 @@ var data = {
     },
     bar: {
     	animated: true,
-    	text: 'loading'
+    	label: 'register.bar.loading',
+    	error: false
     },
     passengerTypes: [
       { label: 'register.passengerType.hint', value: null },
@@ -32,20 +33,19 @@ var data = {
 		{ label: 'register.tripType.round', value: 'round' },
 	],
 	modalText: null,
-	apiobject: null,
-	errorMessage: ''
+	errorMessage: null
 };
 
 var methods = {
 	showSpinner() {
-        console.log('show spinner');
         this.bar.animated = true;
-        this.bar.text = 'loading';
+        this.bar.error = false;
+        this.bar.label = 'register.bar.loading';
     },
-    hideSpinner() {
-        console.log('hide spinner');
+    hideSpinner(hasError) {
         this.bar.animated = false;
-        this.bar.text = 'done!';
+        this.bar.error = hasError;
+        this.bar.label = hasError ? 'register.bar.error' : 'register.bar.ok';
     },
     quickFill() {
     	var form = this.form;
@@ -65,17 +65,22 @@ var methods = {
         vm.errorMessage = '';
         vm.showModal();
         var axiosInst = createAxios();
-        axiosInst.post('http://localhost:8080/servlet-poc/booking', vm.form)
+        axiosInst.post('http://192.51.100.122:8080/servlet-poc/booking', vm.form)
           .then(function (response) {
             console.log(response);
             vm.modalText = vm.form.name + " " + vm.form.lastName + " booked";
           })
           .catch(function (error) {
             console.log(error);
-            vm.errorMessage = error;
-            var keys = Object.entries(response.data);
-            for (i = 0; i < keys.length; i++) {
-            	vm.apiobject += keys[i][0] + " = " + keys[i][1] + " / ";
+            var resp = error.response;
+            if (resp.status == 400) {
+            	vm.errorMessage = resp.data.error;
+            	var keys = Object.entries(resp.data);
+                for (i = 0; i < keys.length; i++) {
+                	vm.errorMessage += "<br />" + keys[i][0] + " = " + keys[i][1];
+                }
+            } else {
+            	vm.errorMessage = "Error " + resp.status + ", try again";
             }
           });
       },
@@ -84,7 +89,10 @@ var methods = {
       },
       hideModal () {
     	  this.$refs.myModalRef.hide();
-    	  this.clearForm();
+    	  if (!this.bar.error) {
+    		  this.clearForm();
+    	  }
+    	  this.modalText = '';
     	  //beforeDestroy();
       },
       clearForm() {
@@ -160,7 +168,7 @@ var computed = {
 			if (this.form.familySize === null) {
 				return null;
 			}
-			return !isNaN(this.form.familySize) && this.form.familySize >= 0 && this.form.familySize <= 30;
+			return !isNaN(this.form.familySize) && this.form.familySize >= 0 && this.form.familySize <= 31;
 		},
 		disableSubmit() {
 			var nameState = this.nameState;
@@ -175,16 +183,16 @@ var computed = {
 
 var created = function () {
     eventHub.$on('before-request', this.showSpinner);
-    eventHub.$on('request-error',  this.hideSpinner);
-    eventHub.$on('after-response', this.hideSpinner);
-    eventHub.$on('response-error', this.hideSpinner);
+    eventHub.$on('request-error',  this.hideSpinner.bind(this, true));
+    eventHub.$on('after-response', this.hideSpinner.bind(this, false));
+    eventHub.$on('response-error', this.hideSpinner.bind(this, true));
 };
 
 var beforeDestroy = function () {
     eventHub.$off('before-request', this.showSpinner);
-    eventHub.$off('request-error',  this.hideSpinner);
-    eventHub.$off('after-response', this.hideSpinner);
-    eventHub.$off('response-error', this.hideSpinner);
+    eventHub.$off('request-error',  this.hideSpinner.bind(this, false));
+    eventHub.$off('after-response', this.hideSpinner.bind(this, false));
+    eventHub.$off('response-error', this.hideSpinner.bind(this, false));
 };
 
 function createAxios() {
