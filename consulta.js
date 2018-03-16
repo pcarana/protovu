@@ -1,34 +1,57 @@
 const items = [
-    { isActive: true, age: 40, first_name: 'Dickerson', last_name: 'Macdonald' },
-    { isActive: false, age: 21, first_name: 'Larsen', last_name: 'Shaw' },
-    { isActive: false, age: 89, first_name: 'Geneva', last_name: 'Wilson' },
-    { isActive: true, age: 38, first_name: 'Jami', last_name: 'Carney' },
-    { isActive: true, age: 41, first_name: 'ADickerson', last_name: 'ZMacdonald' },
-    { isActive: false, age: 22, first_name: 'BLarsen', last_name: 'YShaw' },
-    { isActive: false, age: 90, first_name: 'CGeneva', last_name: 'XWilson' },
-    { isActive: true, age: 39, first_name: 'DJami', last_name: 'WCarney' },
-    { isActive: true, age: 42, first_name: 'EDickerson', last_name: 'VMacdonald' },
-    { isActive: false, age: 23, first_name: 'FLarsen', last_name: 'UShaw' },
-    { isActive: false, age: 8, first_name: 'GGeneva', last_name: 'TWilson' },
-    { isActive: true, age: 3, first_name: 'HJami', last_name: 'SCarney' },
-    { isActive: true, age: 56, first_name: 'IDickerson', last_name: 'RMacdonald' },
-    { isActive: false, age: 78, first_name: 'JLarsen', last_name: 'QShaw' },
-    { isActive: false, age: 28, first_name: 'KGeneva', last_name: 'PWilson' },
-    { isActive: true, age: 87, first_name: 'LJami', last_name: 'OCarney' }
+//    { isActive: true, flightType: 40, name: 'Dickerson', lastName: 'Macdonald' },
+//    { isActive: false, flightType: 21, name: 'Larsen', lastName: 'Shaw' },
+//    { isActive: false, flightType: 89, name: 'Geneva', lastName: 'Wilson' },
+//    { isActive: true, flightType: 38, name: 'Jami', lastName: 'Carney' },
+//    { isActive: true, flightType: 41, name: 'ADickerson', lastName: 'ZMacdonald' },
+//    { isActive: false, flightType: 22, name: 'BLarsen', lastName: 'YShaw' },
+//    { isActive: false, flightType: 90, name: 'CGeneva', lastName: 'XWilson' },
+//    { isActive: true, flightType: 39, name: 'DJami', lastName: 'WCarney' },
+//    { isActive: true, flightType: 42, name: 'EDickerson', lastName: 'VMacdonald' },
+//    { isActive: false, flightType: 23, name: 'FLarsen', lastName: 'UShaw' },
+//    { isActive: false, flightType: 8, name: 'GGeneva', lastName: 'TWilson' },
+//    { isActive: true, flightType: 3, name: 'HJami', lastName: 'SCarney' },
+//    { isActive: true, flightType: 56, name: 'IDickerson', lastName: 'RMacdonald' },
+//    { isActive: false, flightType: 78, name: 'JLarsen', lastName: 'QShaw' },
+//    { isActive: false, flightType: 28, name: 'KGeneva', lastName: 'PWilson' },
+//    { isActive: true, flightType: 87, name: 'LJami', lastName: 'OCarney' }
 	];
+
+
+
 
 const fields = [
 	  {
-		  key: 'first_name',
+		  key: 'name',
 		  sortable: true
 	  },
 	  {
-		  key: 'last_name',
+		  key: 'lastName',
 		  sortable: true
 	  },
 	  {
-		  key: 'age',
-		  sortable: true
+		  key: 'familySize',
+		  sortable: false
+	  },
+	  {
+		  key: 'flightType',
+		  sortable: false
+	  },
+	  {
+		  key: 'departure',
+		  sortable: false
+	  },
+	  {
+		  key: 'arrival',
+		  sortable: false
+	  },
+	  {
+		  key: 'passengerType',
+		  sortable: false
+	  },
+	  {
+		  key: 'services',
+		  sortable: false
 	  }
 	];
 
@@ -40,9 +63,9 @@ var data = {
 	perPage: 4,
 	searchFilterOpts: [
 		{ text: 'Todos', value: null },
-	    { text: 'Nombre', value: 'first_name' },
-	    { text: 'Apellido', value: 'last_name' },
-	    { text: 'Edad', value: 'age' }
+	    { text: 'Nombre', value: 'name' },
+	    { text: 'Apellido', value: 'lastName' },
+	    { text: 'Tipo de vuelo', value: 'flightType' }
 	],
 	searchFilter: null,
 	filterItem: null
@@ -64,14 +87,67 @@ var methods = {
 				return true;
 			}
 			switch (searchFilterOpt) {
-			case 'first_name':
-				return item.first_name.match(regexp);
-			case 'last_name':
-				return item.last_name.match(regexp);
-			case 'age':
-				return item.age.toString().match(regexp);
+			case 'name':
+				return item.name.match(regexp);
+			case 'lastName':
+				return item.lastName.match(regexp);
+			case 'flightType':
+				return item.flightType.toString().match(regexp);
 			default:
-				return item.first_name.match(regexp) || item.last_name.match(regexp) || item.age.toString().match(regexp);
+				return item.name.match(regexp) || item.lastName.match(regexp) || item.flightType.toString().match(regexp);
 			}
 		}
 };
+
+
+var created = function () {
+	var axiosInst = createAxios();
+
+	axiosInst.get('http://localhost:8080/servlet-poc/booking')
+	.then(function(response) {
+		console.log(response);
+
+		var books = response.data.Books;
+		if (books != null) {
+			data.tableItems = response.data.Books;
+		}
+	}).catch(function (error) {
+		console.log(error);
+//		vm.errorMessage = error;
+//		var keys = Object.entries(response.data);
+//		for (i = 0; i < keys.length; i++) {
+//			vm.apiobject += keys[i][0] + " = " + keys[i][1] + " / ";
+//		}
+	});
+};
+
+var beforeDestroy = function () {
+	
+	
+	
+};
+
+function createAxios() {
+    const myaxios = axios.create();
+//    myaxios.interceptors.request.use(
+//        conf => {
+//            eventHub.$emit('before-request');
+//            return conf;
+//        },
+//        error => {
+//            eventHub.$emit('request-error');
+//            return Promise.reject(error);
+//        }
+//    );
+//    myaxios.interceptors.response.use(
+//        response => {
+//            eventHub.$emit('after-response');
+//            return response;
+//        },
+//        error => {
+//            eventHub.$emit('response-error');
+//            return Promise.reject(error);
+//        }
+//    );
+    return myaxios;
+}
