@@ -165,10 +165,30 @@ const messages = {
   }
 };
 
+const dateTimeFormats = {
+  en: {
+    short: {
+      year: '2-digit', month: 'short', day: '2-digit'
+    },
+    long: {
+      year: 'numeric', month: 'numeric', day: 'numeric'
+    }
+  },
+  es: {
+    short: {
+      year: '2-digit', month: 'short', day: '2-digit', timeZoneName: 'short'
+    },
+    long: {
+      year: 'numeric', month: 'numeric', day: 'numeric', timeZoneName: 'long'
+    }
+  }
+}
+
 const i18n = new VueI18n({
 	locale: localStorage.getItem('lang') !== null && localStorage.getItem('lang') !== '' ?
 					localStorage.getItem('lang') : 'es',
-	messages
+  messages,
+  dateTimeFormats
 });
 
 Vue.component('top-menu', {
@@ -586,6 +606,9 @@ const t_search = {
               :current-page="tableCurrentPage"
               :filter="customFilter"
               @filtered="onFiltered">
+          <template slot="arrival" slot-scope="data">
+            s: {{ $d(data.arrival, 'short') }} -  l: {{ $d(data.arrival, 'long') }}
+          </template>
         </b-table>
         <b-pagination size="md" :total-rows="totalRows" :per-page="perPage" v-model="tableCurrentPage" align="center"></b-pagination>
       </b-container>
@@ -606,6 +629,7 @@ const t_search = {
         },
         {
           key: 'familySize',
+          label: 'Companion',
           sortable: false
         },
         {
