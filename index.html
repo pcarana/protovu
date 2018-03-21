@@ -7,20 +7,26 @@
     <link type="text/css" rel="stylesheet" href="https://unpkg.com/bootstrap-vue@2.0.0-rc.1/dist/bootstrap-vue.css" />
 	
     <script src="https://unpkg.com/vue@2.5.13/dist/vue.js"></script>
+		<script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
     <script src="https://unpkg.com/vue-i18n/dist/vue-i18n.js"></script>
     <script src="https://unpkg.com/babel-polyfill@6.26.0/dist/polyfill.min.js"></script>
     <script src="https://unpkg.com/bootstrap-vue@2.0.0-rc.1/dist/bootstrap-vue.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>
+    <script src="https://unpkg.com/vue-chartjs/dist/vue-chartjs.min.js"></script>
+    
   </head>
   <body>
     <div id="app">
       <top-menu></top-menu>
       <h1>PROTOTIPO</h1>
-      <div class="container">
-      <a href="alta.html">Alta</a>
-      <a href="consulta.html">Consulta</a>
-      <a href="peticion.html">Petición API</a>
-      <a href="#">Estadísticas</a>
-      </div>
+      <p>
+        <router-link to="/home">Go Home</router-link>
+        <router-link to="/register">Go Register</router-link>
+        <router-link to="/search">Go Search</router-link>
+        <router-link to="/stats">Go Stats</router-link>
+      </p>
+      <router-view></router-view>
     </div>
     <script src="scripts/app.js"></script>
   </body>
