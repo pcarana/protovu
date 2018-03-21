@@ -1,32 +1,168 @@
-const global_messages = {
-		en: {
-			modules: {
-				register: 'Register',
-				search: 'Search',
-				stats: 'Stats'
-			}
-		},
-		es: {
-			modules: {
-				register: 'Alta',
-				search: 'Consulta',
-				stats: 'Estadísticas'
-			}
-		}
-};
-
-if ( typeof(messages_es) === "undefined" || messages_es === null ) {
-	var messages_es = { es: {} };
-}
-if ( typeof(messages_en) === "undefined" || messages_en === null ) {
-	var messages_en = { en: {} };
-}
-Object.assign(messages_es, global_messages.es);
-Object.assign(messages_en, global_messages.en);
-
 const messages = {
-		es: messages_es,
-		en: messages_en
+  en: {
+    modules: {
+      register: 'Register',
+      search: 'Search',
+      stats: 'Stats'
+    },
+    register: {
+			name: {
+				label: 'Name',
+				hint: 'Enter your name'
+			},
+			lastName: {
+				label: 'Last name',
+				hint: 'Enter your last name'
+			},
+			tripType: {
+				label: 'Trip type',
+				simple: 'Simple',
+				round: 'Round'
+			},
+			travelDate: {
+				label: 'Travel date',
+				departure: 'Departure',
+				arrival: 'Arrival'
+			},
+			familySize: {
+				label: 'Companion',
+				hint: 'Number of people accompanying'
+			},
+			passengerType: {
+				label: 'Passenger type',
+				hint: 'Choose an option',
+				types: {
+					baby: 'Baby (< 2 yrs)',
+					kid: 'Kid (from 2 to 17 yrs)',
+					adult: 'Adult (> 18 yrs)'
+				}
+			},
+			services: {
+				label: 'Additional services',
+				types: {
+					pet: 'Pet',
+					extra: 'Extra luggage',
+					protection: 'Travel insurance',
+					stroller: 'Stroller'
+				}
+			},
+			bar: {
+				loading: 'Sending...',
+				ok: 'Sent!',
+				error: 'Error'
+			},
+			button: {
+				fill: 'Quick fill',
+				clear: 'Clean',
+				submit: 'Send'
+			},
+			modal: {
+				title: 'Booking',
+				close: 'Close'
+			},
+			errors: {
+				name: {
+					minLength: 'Enter at least {min} characters',
+					maxLength: 'Enter at most {max} characters'
+				},
+				travelDate: {
+					departure: 'Required, must be at least today\'s date',
+					arrival: 'Must be greater than or equal to arrival date'
+				},
+				familySize: {
+					range: 'Must be a value between {min} and {max}'
+				}
+			}
+    },
+    stats: {
+			line: 'Line',
+			bar: 'Bar',
+			pie: 'Pie',
+			thanks: 'Special thanks to'
+		}
+  },
+  es: {
+    modules: {
+      register: 'Alta',
+      search: 'Consulta',
+      stats: 'Estadísticas'
+    },
+    register: {
+			name: {
+				label: 'Nombre(s)',
+				hint: 'Ingrese su(s) nombre(s)'
+			},
+			lastName: {
+				label: 'Apellido(s)',
+				hint: 'Ingrese su(s) apellido(s)'
+			},
+			tripType: {
+				label: 'Tipo de viaje',
+				simple: 'Simple',
+				round: 'Redondo'
+			},
+			travelDate: {
+				label: 'Fecha(s) de viaje',
+				departure: 'Fecha de salida',
+				arrival: 'Fecha de regreso'
+			},
+			familySize: {
+				label: 'Total de acompañantes',
+				hint: 'Número de personas acompañantes'
+			},
+			passengerType: {
+				label: 'Tipo de pasajero',
+				hint: 'Seleccione un valor',
+				types: {
+					baby: 'Infante (< 2 años)',
+					kid: 'Niño (2 a 17 años)',
+					adult: 'Adulto (> 18 años)'
+				}
+			},
+			services: {
+				label: 'Servicios adicionales',
+				types: {
+					pet: 'Mascota',
+					extra: 'Equipaje extra',
+					protection: 'Seguro de viaje',
+					stroller: 'Carreola'
+				}
+			},
+			bar: {
+				loading: 'Enviando...',
+				ok: '¡Enviado!',
+				error: 'Error'
+			},
+			button: {
+				fill: 'Llenado rápido',
+				clear: 'Limpiar',
+				submit: 'Enviar'
+			},
+			modal: {
+				title: 'Reservando',
+				close: 'Cerrar'
+			},
+			errors: {
+				name: {
+					minLength: 'Ingrese al menos {min} letras',
+					maxLength: 'Ingrese máximo {max} letras'
+				},
+				travelDate: {
+					departure: 'Requerido, debe ser mayor o igual al día de hoy',
+					arrival: 'Debe ser mayor o igual a la fecha de salida'
+				},
+				familySize: {
+					range: 'Debe ser un valor entre {min} y {max}'
+				}
+			}
+    },
+    stats: {
+			line: 'Líneas',
+			bar: 'Barra',
+			pie: 'Pay',
+			thanks: 'Gracias a'
+		}
+  }
 };
 
 const i18n = new VueI18n({
@@ -233,7 +369,7 @@ const t_register = {
       ],
       modalText: null,
       errorMessage: null,
-      eventHub: new Vue()
+      eventHub: null
     }
   },
   methods: {
@@ -264,7 +400,7 @@ const t_register = {
       vm.apiobject = '';
       vm.errorMessage = '';
       vm.showModal();
-      var axiosInst = createAxios();
+      var axiosInst = vm.createAxios();
       var server = 'http://localhost:8080/servlet-poc/booking';
       axiosInst.post(server, vm.form)
         .then(function (response) {
@@ -294,7 +430,6 @@ const t_register = {
         this.clearForm();
       }
       this.modalText = '';
-      //beforeDestroy();
     },
     clearForm() {
       var form = this.form;
@@ -312,21 +447,21 @@ const t_register = {
       myaxios.defaults.headers.common['Accept-Language'] = i18n.locale;
       myaxios.interceptors.request.use(
         conf => {
-          eventHub.$emit('before-request');
+          this.eventHub.$emit('before-request');
           return conf;
         },
         error => {
-          eventHub.$emit('request-error');
+          this.eventHub.$emit('request-error');
           return Promise.reject(error);
         }
       );
       myaxios.interceptors.response.use(
         response => {
-          eventHub.$emit('after-response');
+          this.eventHub.$emit('after-response');
           return response;
         },
         error => {
-          eventHub.$emit('response-error');
+          this.eventHub.$emit('response-error');
           return Promise.reject(error);
         }
       );
@@ -405,6 +540,7 @@ const t_register = {
     }
   },
   created: function () {
+    this.eventHub = new Vue();
     this.eventHub.$on('before-request', this.showSpinner);
     this.eventHub.$on('request-error', this.hideSpinner.bind(this, true));
     this.eventHub.$on('after-response', this.hideSpinner.bind(this, false));
@@ -541,7 +677,6 @@ const t_search = {
     var inst = this;
     var axiosInst = inst.createAxios();
     var server = 'http://localhost:8080/servlet-poc/booking';
-    console.log(inst.perPage);
     axiosInst.get(server)
       .then(function (response) {
         console.log(response);
