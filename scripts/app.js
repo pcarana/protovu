@@ -3,7 +3,6 @@ const global_messages = {
 			modules: {
 				register: 'Register',
 				search: 'Search',
-				request: 'API Request',
 				stats: 'Stats'
 			}
 		},
@@ -11,7 +10,6 @@ const global_messages = {
 			modules: {
 				register: 'Alta',
 				search: 'Consulta',
-				request: 'Petición API',
 				stats: 'Estadísticas'
 			}
 		}
@@ -41,11 +39,11 @@ Vue.component('top-menu', {
   template: `
   <b-navbar toggleable="md" type="dark" variant="info">
     <b-navbar-toggle target="nav_collapse"></b-navbar-toggle>
-    <b-navbar-brand href="index.html">VUE Proto</b-navbar-brand>
+    <b-navbar-brand to="/home">VUE Proto</b-navbar-brand>
     <b-collapse is-nav id="nav_collapse">
       <b-navbar-nav>
         <b-nav-item v-for="item in navItems"
-                    :href="checkSelected(item) ? '#' : item.href"
+                    :to="checkSelected(item) ? '#' : item.to"
                     :key="item.id"
                     :active=checkSelected(item)>
           {{ $t(item.label) }}
@@ -66,10 +64,9 @@ Vue.component('top-menu', {
   data() {
     return {
       navItems: [
-        {href: "alta.html", id: "register", label: "modules.register"},
-        {href: "consulta.html", id: "search", label: "modules.search"},
-        {href: "peticion.html", id: "request", label: "modules.request"},
-        {href: "estadisticas.html", id: "stats", label: "modules.stats"}
+        {to: "/register", id: "register", label: "modules.register"},
+        {to: "/search", id: "search", label: "modules.search"},
+        {to: "/stats", id: "stats", label: "modules.stats"}
       ],
       langItems: [
     	  {href: "#", id: "en", lang: "EN"},
@@ -87,31 +84,6 @@ Vue.component('top-menu', {
   }
 });
 
-var app_data = {};
-if ( typeof(data) !== "undefined" && data !== null ) {
-	app_data = data;
-}
-var app_methods = {};
-if ( typeof(methods) !== "undefined" && methods !== null ) {
-	app_methods = methods;
-}
-var app_computed = {};
-if ( typeof(computed) !== "undefined" && computed !== null ) {
-	app_computed = computed;
-}
-var app_mounted = function() {};
-if ( typeof(mounted) !== "undefined" && mounted !== null ) {
-	app_mounted = mounted;
-}
-var app_created = function() {};
-if ( typeof(created) !== "undefined" && created !== null ) {
-	app_created = created;
-}
-var app_beforeDestroy = function() {};
-if ( typeof(beforeDestroy) !== "undefined" && beforeDestroy !== null ) {
-	app_beforeDestroy = beforeDestroy;
-}
-
 Vue.mixin({
 	methods: {
 		switchLang(newLang) {
@@ -127,10 +99,12 @@ Vue.mixin({
 const t_home = {
   template: `
   <div class="container">
-      <a href="alta.html">Alta</a>
-      <a href="consulta.html">Consulta</a>
-      <a href="peticion.html">Petición API</a>
-      <a href="#">Estadísticas</a>
+    <h1>HOME</h1>
+    <p>
+      <router-link to="/register">Go Register</router-link>
+      <router-link to="/search">Go Search</router-link>
+      <router-link to="/stats">Go Stats</router-link>
+    </p>
   </div>
   `
 };
@@ -291,7 +265,6 @@ const t_register = {
       vm.errorMessage = '';
       vm.showModal();
       var axiosInst = createAxios();
-      //var server = 'http://192.51.100.122:8080/servlet-poc/booking';
       var server = 'http://localhost:8080/servlet-poc/booking';
       axiosInst.post(server, vm.form)
         .then(function (response) {
@@ -447,36 +420,41 @@ const t_register = {
 
 const t_search = {
   template: `
-  <b-container fluid>
-	      <b-row>
-		      <b-col md="10" class="my-1">
-			      <b-form-group horizontal label="Filtrar" class="mb-0">
-			        <b-input-group>
-			          <b-input-group-prepend>
-			            <b-form-select id="searchFilter"
-                        				:options="searchFilterOpts"
-                        				v-model="searchFilter">
-          				</b-form-select>
-			          </b-input-group-prepend>
-			          <b-form-input v-model="filterItem" placeholder="Buscar..."></b-form-input>
-			          <b-input-group-append>
-			            <b-btn :disabled="!customFilter" @click="filterItem = ''" variant="outline-primary">Limpiar</b-btn>
-			          </b-input-group-append>
-			        </b-input-group>
-			      </b-form-group>
-		      </b-col>
-	      </b-row>
-		  <b-table striped hover show-empty
-		           :items="tableItems"
-				   :fields="tableFields"
-				   :per-page="perPage"
-				   :total-rows="totalRows"
-				   :current-page="tableCurrentPage"
-				   :filter="customFilter"
-				   @filtered="onFiltered">
-		  </b-table>
-		  <b-pagination size="md" :total-rows="totalRows" :per-page="perPage" v-model="tableCurrentPage" align="center"></b-pagination>
-	  </b-container>
+  <div>
+    <h1>{{ $t("modules.search") }}</h1>
+    <div class="container">
+      <b-container fluid>
+        <b-row>
+          <b-col md="10" class="my-1">
+            <b-form-group horizontal label="Filtrar" class="mb-0">
+              <b-input-group>
+                <b-input-group-prepend>
+                  <b-form-select id="searchFilter"
+                                :options="searchFilterOpts"
+                                v-model="searchFilter">
+                  </b-form-select>
+                </b-input-group-prepend>
+                <b-form-input v-model="filterItem" placeholder="Buscar..."></b-form-input>
+                <b-input-group-append>
+                  <b-btn :disabled="!customFilter" @click="filterItem = ''" variant="outline-primary">Limpiar</b-btn>
+                </b-input-group-append>
+              </b-input-group>
+            </b-form-group>
+          </b-col>
+        </b-row>
+        <b-table striped hover show-empty
+                  :items="tableItems"
+              :fields="tableFields"
+              :per-page="perPage"
+              :total-rows="totalRows"
+              :current-page="tableCurrentPage"
+              :filter="customFilter"
+              @filtered="onFiltered">
+        </b-table>
+        <b-pagination size="md" :total-rows="totalRows" :per-page="perPage" v-model="tableCurrentPage" align="center"></b-pagination>
+      </b-container>
+    </div>
+  </div>
   `,
   data() {
     return {
@@ -556,26 +534,6 @@ const t_search = {
     },
     createAxios() {
       const myaxios = axios.create();
-      //    myaxios.interceptors.request.use(
-      //        conf => {
-      //            eventHub.$emit('before-request');
-      //            return conf;
-      //        },
-      //        error => {
-      //            eventHub.$emit('request-error');
-      //            return Promise.reject(error);
-      //        }
-      //    );
-      //    myaxios.interceptors.response.use(
-      //        response => {
-      //            eventHub.$emit('after-response');
-      //            return response;
-      //        },
-      //        error => {
-      //            eventHub.$emit('response-error');
-      //            return Promise.reject(error);
-      //        }
-      //    );
       return myaxios;
     }
   },
@@ -728,12 +686,6 @@ const router = new VueRouter({
 
 var app = new Vue({
   el: '#app',
-  data : app_data,
-  methods: app_methods,
-  computed: app_computed,
-  mounted: app_mounted,
   i18n,
-  created: app_created,
-  beforeDestroy: app_beforeDestroy,
   router
 });
