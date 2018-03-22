@@ -168,18 +168,12 @@ const messages = {
 const dateTimeFormats = {
   en: {
     short: {
-      year: '2-digit', month: 'short', day: '2-digit'
-    },
-    long: {
       year: 'numeric', month: 'numeric', day: 'numeric'
     }
   },
   es: {
     short: {
-      year: '2-digit', month: 'short', day: '2-digit', timeZoneName: 'short'
-    },
-    long: {
-      year: 'numeric', month: 'numeric', day: 'numeric', timeZoneName: 'long'
+      year: 'numeric', month: 'numeric', day: 'numeric'
     }
   }
 }
@@ -606,8 +600,11 @@ const t_search = {
               :current-page="tableCurrentPage"
               :filter="customFilter"
               @filtered="onFiltered">
+          <template slot="departure" slot-scope="data">
+            {{ $d(data.value, 'short') }}
+          </template>
           <template slot="arrival" slot-scope="data">
-            s: {{ $d(data.arrival, 'short') }} -  l: {{ $d(data.arrival, 'long') }}
+            {{ $d(data.value, 'short') }}
           </template>
         </b-table>
         <b-pagination size="md" :total-rows="totalRows" :per-page="perPage" v-model="tableCurrentPage" align="center"></b-pagination>
@@ -638,11 +635,13 @@ const t_search = {
         },
         {
           key: 'departure',
-          sortable: false
+          sortable: false,
+          formatter: 'getDateFromVal'
         },
         {
           key: 'arrival',
-          sortable: false
+          sortable: false,
+          formatter: 'getDateFromVal'
         },
         {
           key: 'passengerType',
@@ -695,6 +694,10 @@ const t_search = {
     createAxios() {
       const myaxios = axios.create();
       return myaxios;
+    },
+    getDateFromVal(value) {
+      var now = new Date();
+      return new Date(value + "T00:00:00" + now.toString().match(/([-\+][0-9]+)\s/)[1]);
     }
   },
   created: function () {
