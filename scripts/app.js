@@ -15,9 +15,7 @@ const messages = {
 				hint: 'Enter your last name'
 			},
 			tripType: {
-				label: 'Trip type',
-				simple: 'Simple',
-				round: 'Round'
+				label: 'Trip type'
 			},
 			travelDate: {
 				label: 'Travel date',
@@ -30,21 +28,10 @@ const messages = {
 			},
 			passengerType: {
 				label: 'Passenger type',
-				hint: 'Choose an option',
-				types: {
-					baby: 'Baby (< 2 yrs)',
-					kid: 'Kid (from 2 to 17 yrs)',
-					adult: 'Adult (> 18 yrs)'
-				}
+				hint: 'Choose an option'
 			},
 			services: {
-				label: 'Additional services',
-				types: {
-					pet: 'Pet',
-					extra: 'Extra luggage',
-					protection: 'Travel insurance',
-					stroller: 'Stroller'
-				}
+				label: 'Additional services'
 			},
 			bar: {
 				loading: 'Sending...',
@@ -79,7 +66,24 @@ const messages = {
 			bar: 'Bar',
 			pie: 'Pie',
 			thanks: 'Special thanks to'
-		}
+    },
+    catalogs: {
+      tripType: {
+        simple: 'Simple',
+				round: 'Round'
+      },
+      passengerType: {
+        baby: 'Baby (< 2 yrs)',
+        kid: 'Kid (from 2 to 17 yrs)',
+        adult: 'Adult (> 18 yrs)'
+      },
+      serviceType: {
+        pet: 'Pet',
+        extra: 'Extra luggage',
+        protection: 'Travel insurance',
+        stroller: 'Stroller'
+      }
+    }
   },
   es: {
     modules: {
@@ -97,9 +101,7 @@ const messages = {
 				hint: 'Ingrese su(s) apellido(s)'
 			},
 			tripType: {
-				label: 'Tipo de viaje',
-				simple: 'Simple',
-				round: 'Redondo'
+				label: 'Tipo de viaje'
 			},
 			travelDate: {
 				label: 'Fecha(s) de viaje',
@@ -112,21 +114,10 @@ const messages = {
 			},
 			passengerType: {
 				label: 'Tipo de pasajero',
-				hint: 'Seleccione un valor',
-				types: {
-					baby: 'Infante (< 2 años)',
-					kid: 'Niño (2 a 17 años)',
-					adult: 'Adulto (> 18 años)'
-				}
+				hint: 'Seleccione un valor'
 			},
 			services: {
-				label: 'Servicios adicionales',
-				types: {
-					pet: 'Mascota',
-					extra: 'Equipaje extra',
-					protection: 'Seguro de viaje',
-					stroller: 'Carreola'
-				}
+				label: 'Servicios adicionales'
 			},
 			bar: {
 				loading: 'Enviando...',
@@ -161,19 +152,36 @@ const messages = {
 			bar: 'Barra',
 			pie: 'Pay',
 			thanks: 'Gracias a'
-		}
+		},
+    catalogs: {
+      tripType: {
+        simple: 'Simple',
+				round: 'Redondo'
+      },
+      passengerType: {
+        baby: 'Infante (< 2 años)',
+        kid: 'Niño (2 a 17 años)',
+        adult: 'Adulto (> 18 años)'
+      },
+      serviceType: {
+        pet: 'Mascota',
+        extra: 'Equipaje extra',
+        protection: 'Seguro de viaje',
+        stroller: 'Carreola'
+      }
+    }
   }
 };
 
 const dateTimeFormats = {
   en: {
     short: {
-      year: 'numeric', month: 'numeric', day: 'numeric'
+      year: 'numeric', month: 'short', day: 'numeric'
     }
   },
   es: {
     short: {
-      year: 'numeric', month: 'numeric', day: 'numeric'
+      year: 'numeric', month: 'short', day: 'numeric'
     }
   }
 }
@@ -367,19 +375,19 @@ const t_register = {
       },
       passengerTypes: [
         { label: 'register.passengerType.hint', value: null },
-        { label: 'register.passengerType.types.baby', value: 'baby' },
-        { label: 'register.passengerType.types.kid', value: 'kid' },
-        { label: 'register.passengerType.types.adult', value: 'adult' }
+        { label: 'catalogs.passengerType.baby', value: 'baby' },
+        { label: 'catalogs.passengerType.kid', value: 'kid' },
+        { label: 'catalogs.passengerType.adult', value: 'adult' }
       ],
       serviceTypes: [
-        { label: 'register.services.types.pet', value: 'pet' },
-        { label: 'register.services.types.extra', value: 'extra' },
-        { label: 'register.services.types.protection', value: 'protection' },
-        { label: 'register.services.types.stroller', value: 'stroller' }
+        { label: 'catalogs.serviceType.pet', value: 'pet' },
+        { label: 'catalogs.serviceType.extra', value: 'extra' },
+        { label: 'catalogs.serviceType.protection', value: 'protection' },
+        { label: 'catalogs.serviceType.stroller', value: 'stroller' }
       ],
       tripTypes: [
-        { label: 'register.tripType.simple', value: 'simple' },
-        { label: 'register.tripType.round', value: 'round' },
+        { label: 'catalogs.tripType.simple', value: 'simple' },
+        { label: 'catalogs.tripType.round', value: 'round' },
       ],
       modalText: null,
       errorMessage: null,
@@ -600,11 +608,22 @@ const t_search = {
               :current-page="tableCurrentPage"
               :filter="customFilter"
               @filtered="onFiltered">
+          <template slot="flightType" slot-scope="data">
+            {{ $t(data.value) }}
+          </template>
           <template slot="departure" slot-scope="data">
             {{ $d(data.value, 'short') }}
           </template>
           <template slot="arrival" slot-scope="data">
             {{ $d(data.value, 'short') }}
+          </template>
+          <template slot="passengerType" slot-scope="data">
+            {{ $t('catalogs.passengerType.' + data.value) }}
+          </template>
+          <template slot="services" slot-scope="data">
+            <span v-for="item in data.value">
+              {{ $t(item) }}<br />
+            </span>
           </template>
         </b-table>
         <b-pagination size="md" :total-rows="totalRows" :per-page="perPage" v-model="tableCurrentPage" align="center"></b-pagination>
@@ -631,17 +650,20 @@ const t_search = {
         },
         {
           key: 'flightType',
-          sortable: false
+          sortable: false,
+          formatter: (value) => {
+            return 'catalogs.tripType.' + value;
+          }
         },
         {
           key: 'departure',
           sortable: false,
-          formatter: 'getDateFromVal'
+          formatter: 'formatDate'
         },
         {
           key: 'arrival',
           sortable: false,
-          formatter: 'getDateFromVal'
+          formatter: 'formatDate'
         },
         {
           key: 'passengerType',
@@ -649,7 +671,8 @@ const t_search = {
         },
         {
           key: 'services',
-          sortable: false
+          sortable: false,
+          formatter: 'formatServices'
         }
       ],
       tableCurrentPage : 1,
@@ -695,9 +718,20 @@ const t_search = {
       const myaxios = axios.create();
       return myaxios;
     },
-    getDateFromVal(value) {
+    formatDate(value) {
       var now = new Date();
       return new Date(value + "T00:00:00" + now.toString().match(/([-\+][0-9]+)\s/)[1]);
+    },
+    formatServices(value) {
+      const prefix = 'catalogs.serviceType.';
+      var labeled = [];
+      if (value !== null) {
+        labeled.push(prefix + value[0]);
+        for (var i = 1; i < value.length; i++) {
+          labeled.push(prefix + value[i]);
+        }
+      }
+      return labeled;
     }
   },
   created: function () {
