@@ -83,6 +83,9 @@ const messages = {
         protection: 'Travel insurance',
         stroller: 'Stroller'
       }
+    },
+    errors: {
+      noDataFound: 'No data found'
     }
   },
   es: {
@@ -144,7 +147,7 @@ const messages = {
 				},
 				familySize: {
 					range: 'Debe ser un valor entre {min} y {max}'
-				}
+        }
 			}
     },
     stats: {
@@ -169,6 +172,9 @@ const messages = {
         protection: 'Seguro de viaje',
         stroller: 'Carreola'
       }
+    },
+    errors: {
+      noDataFound: 'No se encontraron datos'
     }
   }
 };
@@ -607,7 +613,8 @@ const t_search = {
               :total-rows="totalRows"
               :current-page="tableCurrentPage"
               :filter="customFilter"
-              @filtered="onFiltered">
+              @filtered="onFiltered"
+              :empty-filtered-text="$t('errors.noDataFound')">
           <template slot="HEAD_name" slot-scope="data">
             {{ $t(data.label) }}
           </template>
