@@ -86,6 +86,9 @@ const messages = {
     },
     errors: {
       noDataFound: 'No data found'
+    },
+    date: {
+      format: 'mm/dd/yyyy'
     }
   },
   es: {
@@ -175,6 +178,9 @@ const messages = {
     },
     errors: {
       noDataFound: 'No se encontraron datos'
+    },
+    date: {
+      format: 'dd/mm/yyyy'
     }
   }
 };
@@ -249,15 +255,18 @@ Vue.component('top-menu', {
 });
 
 Vue.mixin({
-	methods: {
-		switchLang(newLang) {
-	    	i18n.locale = newLang;
-	    	localStorage.setItem('lang', i18n.locale);
-	    },
-	    isActiveLang(langId) {
-	    	return i18n.locale === langId;
-	    }
-	}
+  methods: {
+    switchLang(newLang) {
+      i18n.locale = newLang;
+      localStorage.setItem('lang', i18n.locale);
+    },
+    isActiveLang(langId) {
+      return i18n.locale === langId;
+    },
+    getActiveLang() {
+      return i18n.locale;
+    }
+  }
 });
 
 const t_home = {
@@ -305,7 +314,27 @@ const t_register = {
             </b-form-group>
             <b-form-group id="dateGroup" :label="$t('register.travelDate.label')">
                 <!-- Fecha salida -->
-                <b-form-group id="departureGroup" :label="$t('register.travelDate.departure')" label-for="departureInput">
+                <b-form-group label="Calendar">
+                  <b-form-radio-group id="calendarType"
+                    buttons
+                    v-model="calendarType"
+                    :options="calendarOpts"
+                    name="calendarType" />
+                </b-form-group>
+                <b-form-group id="departureGroupTest" :label="$t('register.travelDate.departure')" label-for="departureInputTest"
+                              v-if="calendarType === 'vue-datetime'">
+                    <!-- test another -->
+                    <input id="departureInputTest" type="date" required v-model="form.departure"
+                          :data-date-format="$t('date.format')"
+                          :date-format="$t('date.format')"
+                          :lang="getActiveLang()">
+                    </input>
+                    <b-form-invalid-feedback>
+                        {{ $t("register.errors.travelDate.departure") }}
+                    </b-form-invalid-feedback>
+                </b-form-group>
+                <b-form-group id="departureGroup" :label="$t('register.travelDate.departure')" label-for="departureInput"
+                              v-if="calendarType === 'bootstrap'">
                     <b-form-input id="departureInput" type="date" required :state="departureState" v-model="form.departure">
                     </b-form-input>
                     <b-form-invalid-feedback>
@@ -395,9 +424,14 @@ const t_register = {
         { label: 'catalogs.tripType.simple', value: 'simple' },
         { label: 'catalogs.tripType.round', value: 'round' },
       ],
+      calendarOpts: [
+        { text: 'Bootstrap', value: 'bootstrap' },
+        { text: 'Vue-datetime', value: 'vue-datetime' }
+      ],
       modalText: null,
       errorMessage: null,
-      eventHub: null
+      eventHub: null,
+      calendarType: 'bootstrap'
     }
   },
   methods: {
