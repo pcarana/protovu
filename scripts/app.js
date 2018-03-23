@@ -608,6 +608,30 @@ const t_search = {
               :current-page="tableCurrentPage"
               :filter="customFilter"
               @filtered="onFiltered">
+          <template slot="HEAD_name" slot-scope="data">
+            {{ $t(data.label) }}
+          </template>
+          <template slot="HEAD_lastName" slot-scope="data">
+            {{ $t(data.label) }}
+          </template>
+          <template slot="HEAD_familySize" slot-scope="data">
+            {{ $t(data.label) }}
+          </template>
+          <template slot="HEAD_flightType" slot-scope="data">
+            {{ $t(data.label) }}
+          </template>
+          <template slot="HEAD_departure" slot-scope="data">
+            {{ $t(data.label) }}
+          </template>
+          <template slot="HEAD_arrival" slot-scope="data">
+            {{ $t(data.label) }}
+          </template>
+          <template slot="HEAD_passengerType" slot-scope="data">
+            {{ $t(data.label) }}
+          </template>
+          <template slot="HEAD_services" slot-scope="data">
+            {{ $t(data.label) }}
+          </template>
           <template slot="flightType" slot-scope="data">
             {{ $t(data.value) }}
           </template>
@@ -637,19 +661,22 @@ const t_search = {
       tableFields: [
         {
           key: 'name',
+          label: 'register.name.label',
           sortable: true
         },
         {
           key: 'lastName',
+          label: 'register.lastName.label',
           sortable: true
         },
         {
           key: 'familySize',
-          label: 'Companion',
+          label: 'register.familySize.label',
           sortable: false
         },
         {
           key: 'flightType',
+          label: 'register.tripType.label',
           sortable: false,
           formatter: (value) => {
             return 'catalogs.tripType.' + value;
@@ -657,20 +684,24 @@ const t_search = {
         },
         {
           key: 'departure',
+          label: 'register.travelDate.departure',
           sortable: false,
           formatter: 'formatDate'
         },
         {
           key: 'arrival',
+          label: 'register.travelDate.arrival',
           sortable: false,
           formatter: 'formatDate'
         },
         {
           key: 'passengerType',
+          label: 'register.passengerType.label',
           sortable: false
         },
         {
           key: 'services',
+          label: 'register.services.label',
           sortable: false,
           formatter: 'formatServices'
         }
