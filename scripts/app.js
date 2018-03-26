@@ -532,12 +532,15 @@ const t_register = {
   },
   computed: {
 	  nameState() {
-			var nameLength = this.form.name === null ? 0: this.form.name.length;
+      var nameLength = this.form.name === null ? 0: this.form.name.length;
+      if (this.form.name === null || nameLength === 0) {
+				return null;
+			}
 			return nameLength >= 2 && nameLength <= 50 ? true : false;
 		},
 		nameMessage() {
 			var nameLength = this.form.name === null ? 0: this.form.name.length;
-			if (nameLength < 2 || nameLength > 50) {
+			if (nameLength > 0 && (nameLength < 2 || nameLength > 50)) {
 				return nameLength < 2 ? 'register.errors.name.minLength' : 'register.errors.name.maxLength';
 			}
 			return '';
@@ -559,7 +562,7 @@ const t_register = {
 		departureState() {
 			var departure = this.form.departure;
 			if (departure === null || departure.length === 0) {
-				return false;
+				return null;
 			}
 			var now = new Date();
 			now.setHours(0);
@@ -572,11 +575,14 @@ const t_register = {
 		arrivalState() {
 			var arrival = this.form.arrival;
 			var departure = this.form.departure;
-			var tripType = this.form.tripType;
-			if (tripType === 'round' && (departure === null || departure.length === 0)) {
-				return false;
+      var tripType = this.form.tripType;
+      if (tripType === 'simple') {
+        return null;
+      }
+			if (departure === null || departure.length === 0) {
+				return null;
 			}
-			if (arrival === null || departure === null || arrival.length === 0 || departure.length === 0) {
+			if (arrival === null || arrival.length === 0) {
 				return null;
 			}
 			var departureDate = new Date(departure);
@@ -584,7 +590,11 @@ const t_register = {
 			return arrivalDate >= departureDate;
 		},
 		arrivalDisabled() {
-			return this.form.tripType === 'simple';
+      var simpleTrip = this.form.tripType === 'simple';
+      if (simpleTrip) {
+        this.form.arrival = null;
+      }
+			return simpleTrip;
 		},
 		familySizeState() {
 			if (this.form.familySize === null) {
@@ -593,12 +603,13 @@ const t_register = {
 			return !isNaN(this.form.familySize) && this.form.familySize >= 0 && this.form.familySize <= 31;
 		},
 		disableSubmit() {
-			var nameState = this.nameState;
+			var nameState = this.nameState === null ? false : this.nameState;
 			var lastNameState = this.lastNameState === null ? true : this.lastNameState;
 			var familySizeState = this.familySizeState === null ? true : this.familySizeState;
-			var departureState = this.departureState === null ? true : this.departureState;
-			var arrivalState = this.arrivalState === null ? true : this.arrivalState;
-			return !(nameState && lastNameState && familySizeState && departureState && arrivalState);
+			var departureState = this.departureState === null ? false : this.departureState;
+      var arrivalState = this.arrivalState === null ? (this.form.tripType === 'simple' ? true : false) : this.arrivalState;
+      var passengerTypeState = this.form.passengerType !== null;
+			return !(nameState && lastNameState && familySizeState && departureState && arrivalState && passengerTypeState);
     }
   },
   created: function () {
