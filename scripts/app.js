@@ -1,190 +1,3 @@
-const messages = {
-  en: {
-    modules: {
-      register: 'Register',
-      search: 'Search',
-      stats: 'Stats'
-    },
-    register: {
-			name: {
-				label: 'Name',
-				hint: 'Enter your name'
-			},
-			lastName: {
-				label: 'Last name',
-				hint: 'Enter your last name'
-			},
-			tripType: {
-				label: 'Trip type'
-			},
-			travelDate: {
-				label: 'Travel date',
-				departure: 'Departure',
-				arrival: 'Arrival'
-			},
-			familySize: {
-				label: 'Companion',
-				hint: 'Number of people accompanying'
-			},
-			passengerType: {
-				label: 'Passenger type',
-				hint: 'Choose an option'
-			},
-			services: {
-				label: 'Additional services'
-			},
-			bar: {
-				loading: 'Sending...',
-				ok: 'Sent!',
-				error: 'Error'
-			},
-			button: {
-				fill: 'Quick fill',
-				clear: 'Clean',
-				submit: 'Send'
-			},
-			modal: {
-				title: 'Booking',
-				close: 'Close'
-			},
-			errors: {
-				name: {
-					minLength: 'Enter at least {min} characters',
-					maxLength: 'Enter at most {max} characters'
-				},
-				travelDate: {
-					departure: 'Required, must be at least today\'s date',
-					arrival: 'Must be greater than or equal to arrival date'
-				},
-				familySize: {
-					range: 'Must be a value between {min} and {max}'
-				}
-			}
-    },
-    stats: {
-			line: 'Line',
-			bar: 'Bar',
-			pie: 'Pie',
-			thanks: 'Special thanks to'
-    },
-    catalogs: {
-      tripType: {
-        simple: 'Simple',
-				round: 'Round'
-      },
-      passengerType: {
-        baby: 'Baby (< 2 yrs)',
-        kid: 'Kid (from 2 to 17 yrs)',
-        adult: 'Adult (> 18 yrs)'
-      },
-      serviceType: {
-        pet: 'Pet',
-        extra: 'Extra luggage',
-        protection: 'Travel insurance',
-        stroller: 'Stroller'
-      }
-    },
-    errors: {
-      noDataFound: 'No data found'
-    },
-    date: {
-      format: 'mm/dd/yyyy'
-    }
-  },
-  es: {
-    modules: {
-      register: 'Alta',
-      search: 'Consulta',
-      stats: 'Estadísticas'
-    },
-    register: {
-			name: {
-				label: 'Nombre(s)',
-				hint: 'Ingrese su(s) nombre(s)'
-			},
-			lastName: {
-				label: 'Apellido(s)',
-				hint: 'Ingrese su(s) apellido(s)'
-			},
-			tripType: {
-				label: 'Tipo de viaje'
-			},
-			travelDate: {
-				label: 'Fecha(s) de viaje',
-				departure: 'Fecha de salida',
-				arrival: 'Fecha de regreso'
-			},
-			familySize: {
-				label: 'Total de acompañantes',
-				hint: 'Número de personas acompañantes'
-			},
-			passengerType: {
-				label: 'Tipo de pasajero',
-				hint: 'Seleccione un valor'
-			},
-			services: {
-				label: 'Servicios adicionales'
-			},
-			bar: {
-				loading: 'Enviando...',
-				ok: '¡Enviado!',
-				error: 'Error'
-			},
-			button: {
-				fill: 'Llenado rápido',
-				clear: 'Limpiar',
-				submit: 'Enviar'
-			},
-			modal: {
-				title: 'Reservando',
-				close: 'Cerrar'
-			},
-			errors: {
-				name: {
-					minLength: 'Ingrese al menos {min} letras',
-					maxLength: 'Ingrese máximo {max} letras'
-				},
-				travelDate: {
-					departure: 'Requerido, debe ser mayor o igual al día de hoy',
-					arrival: 'Debe ser mayor o igual a la fecha de salida'
-				},
-				familySize: {
-					range: 'Debe ser un valor entre {min} y {max}'
-        }
-			}
-    },
-    stats: {
-			line: 'Líneas',
-			bar: 'Barra',
-			pie: 'Pay',
-			thanks: 'Gracias a'
-		},
-    catalogs: {
-      tripType: {
-        simple: 'Simple',
-				round: 'Redondo'
-      },
-      passengerType: {
-        baby: 'Infante (< 2 años)',
-        kid: 'Niño (2 a 17 años)',
-        adult: 'Adulto (> 18 años)'
-      },
-      serviceType: {
-        pet: 'Mascota',
-        extra: 'Equipaje extra',
-        protection: 'Seguro de viaje',
-        stroller: 'Carreola'
-      }
-    },
-    errors: {
-      noDataFound: 'No se encontraron datos'
-    },
-    date: {
-      format: 'dd/mm/yyyy'
-    }
-  }
-};
-
 const dateTimeFormats = {
   en: {
     short: {
@@ -201,7 +14,6 @@ const dateTimeFormats = {
 const i18n = new VueI18n({
 	locale: localStorage.getItem('lang') !== null && localStorage.getItem('lang') !== '' ?
 					localStorage.getItem('lang') : 'es',
-  messages,
   dateTimeFormats
 });
 
@@ -257,8 +69,17 @@ Vue.component('top-menu', {
 Vue.mixin({
   methods: {
     switchLang(newLang) {
-      i18n.locale = newLang;
-      localStorage.setItem('lang', i18n.locale);
+      console.log('At switch lang ' + i18n.messages[newLang]);
+      loadLang(newLang, (err, message) => {
+        console.log('At Callback ' + err + '-' + message);
+        if (err) {
+          console.error(err);
+          return;
+        }
+        i18n.setLocaleMessage(newLang, message);
+        localStorage.setItem('lang', newLang);
+        i18n.locale = newLang;
+      });
     },
     isActiveLang(langId) {
       return i18n.locale === langId;
@@ -952,6 +773,17 @@ const t_stats = {
   }
 };
 
+const t_main = {
+  template: `
+    <div>
+      <top-menu></top-menu>
+      <transition name="fade" mode="out-in">
+        <router-view></router-view>
+      </transition>
+    </div>
+  `
+};
+
 const routes = [
   { path: '/home', component: t_home },
   { path: '/register', component: t_register },
@@ -963,8 +795,46 @@ const router = new VueRouter({
   routes // short for `routes: routes`
 })
 
+// Mounted until the default lang is loaded (goto loadLang call)
 var app = new Vue({
-  el: '#app',
   i18n,
-  router
+  router,
+  template: t_main.template
+});
+
+function loadLang(lang, cb) {
+  if (typeof(i18n.messages[lang]) !== "undefined") {
+    i18n.locale = lang;
+    localStorage.setItem('lang', lang);
+    return;
+  }
+  var axiosInstance = axios.create();
+  console.log('Inst create');
+  var server = 'http://localhost:8080/servlet-poc/bundle';
+  axiosInstance.defaults.headers.common['Accept-Language'] = lang;
+  return axiosInstance.get(server)
+  .then(function(response) {
+    console.log(response.data);
+    return Promise.resolve(response.data[lang]);
+  }).catch(function (error) {
+    console.log(error);
+    return Promise.reject(new Error(error));
+  }).then(function(message) {
+    console.log('Callback OK');
+    cb(null, message);
+  }).catch(function(error) {
+    console.log('Callback ERROR');
+    cb(error);
+  });
+}
+
+loadLang(i18n.locale, (err, message) => {
+  console.log('At Callback ' + err + '-' + message);
+  if (err) {
+    console.error(err);
+    return;
+  }
+  i18n.setLocaleMessage(i18n.locale, message);
+  localStorage.setItem('lang', i18n.locale);
+  app.$mount('#app');
 });
